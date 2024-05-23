@@ -36,6 +36,9 @@ function MainContent() {
               <li className="my-2">
                 <Link to="/usuario/pesquisar" className="text-white hover:text-blue-500">Pesquisar Usuário</Link>
               </li>
+              <li className="my-2">
+                <Link to="/turma/cadastro" className="text-white hover:text-blue-500">Cadastro de turma</Link>
+              </li>
             </ul>
           )}
         </div>
@@ -59,6 +62,7 @@ function MainContent() {
                           <PesquisarUsuario />
                         </RoleBasedRoute>
                 } />     
+                
         </Routes>
       </div>
     </div>

@@ -11,6 +11,13 @@ class Users(db.Model):
     matricula = db.Column(db.String(100))
     senha = db.Column(db.String(100), nullable=False)
 
+class Turma(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    descricao = db.Column(db.String(100), nullable=False)
+    codigo = db.Column(db.String(100), unique=True)
+ 
+
 
    
 

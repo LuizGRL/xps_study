@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function ClassRegistration() {
-  const [className, setClassName] = useState('');
-  const [description, setDescription] = useState('');
-  const [number, setNumber] = useState('');
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [codigo, setCodigo] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/auth/atividade', {
-        className,
-        description,
-        number
+      const response = await axios.post('http://localhost:5000/turma/cadastro', {
+        nome,
+        descricao,
+        codigo
       });
       console.log(response.data); // Log the response from the server
       alert('Turma cadastrada com sucesso!');
@@ -23,7 +23,7 @@ function ClassRegistration() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center">
       <form onSubmit={handleSubmit} className="w-full max-w-lg p-5 bg-white rounded shadow-md">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Cadastro de Turma</h2>
         <div className="mb-4">
@@ -32,9 +32,9 @@ function ClassRegistration() {
           </label>
           <input
             type="text"
-            id="className"
-            value={className}
-            onChange={(e) => setClassName(e.target.value)}
+            id="nome"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
           />
@@ -44,9 +44,9 @@ function ClassRegistration() {
             Descrição
           </label>
           <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            id="descricao"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
           />
@@ -56,10 +56,10 @@ function ClassRegistration() {
             Numeração
           </label>
           <input
-            type="number"
-            id="number"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
+            type="text"
+            id="codigo"
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
           />
