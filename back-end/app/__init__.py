@@ -19,6 +19,9 @@ def create_app():
     CORS(app)
 
     from .auth import auth_blueprint
+    from .usuario import user_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    app.register_blueprint(user_blueprint, url_prefix='/usuario')
+
 
     return app
