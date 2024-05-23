@@ -28,13 +28,18 @@ function EditarUsuario() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            const response = await axios.put(`http://localhost:5000/usuario/atualizar/${usuario.matricula}`, usuario);
-            console.log(response.data);
-            alert('Usuário atualizado com sucesso');
-        } catch (error) {
-            console.error('Erro ao atualizar usuário:', error);
-            alert('Erro ao atualizar usuário.');
+        if (usuario && usuario.matricula) {
+            try {
+                console.log(`Enviando dados para atualizar: ${JSON.stringify(usuario)}`);
+                const response = await axios.put(`http://localhost:5000/usuario/editar/${usuario.matricula}`, usuario);
+                console.log('Resposta do servidor:', response.data);
+                alert('Usuário atualizado com sucesso');
+            } catch (error) {
+                console.error('Erro ao atualizar usuário:', error);
+                alert('Erro ao atualizar usuário.');
+            }
+        } else {
+            alert('Por favor, pesquise um usuário antes de tentar atualizar.');
         }
     };
 
@@ -69,36 +74,43 @@ function EditarUsuario() {
                         />
                         <input
                             type="text"
-                            name="nome"
+                            name="sobrenome"
                             value={usuario.sobrenome || ''}
                             onChange={handleInputChange}
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
                         <input
                             type="text"
-                            name="nome"
+                            name="cpf"
                             value={usuario.cpf || ''}
                             onChange={handleInputChange}
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
                         <input
-                            type="text"
-                            name="nome"
+                            type="email"
+                            name="email"
                             value={usuario.email || ''}
                             onChange={handleInputChange}
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
                         <input
                             type="text"
-                            name="nome"
+                            name="telefone"
                             value={usuario.telefone || ''}
                             onChange={handleInputChange}
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
                         <input
                             type="text"
-                            name="nome"
+                            name="role"
                             value={usuario.role || ''}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                          <input
+                            type="text"
+                            name="matricula"
+                            value={usuario.matricula || ''}
                             onChange={handleInputChange}
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />

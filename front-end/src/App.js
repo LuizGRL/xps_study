@@ -29,11 +29,12 @@ function MainContent() {
           </button>
           {isOpen && (
             <ul className="flex flex-col">
-              <li className="my-2">
-                <Link to="/login" className="text-white hover:text-blue-500">Login</Link>
-              </li>
+              
               <li className="my-2">
                 <Link to="/usuario/cadastro" className="text-white hover:text-blue-500">Cadastro de Usuário</Link>
+              </li>
+              <li className="my-2">
+                <Link to="/usuario/pesquisar" className="text-white hover:text-blue-500">Pesquisar Usuário</Link>
               </li>
             </ul>
           )}

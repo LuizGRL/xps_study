@@ -7,9 +7,7 @@ user_blueprint = Blueprint('user', __name__)
 
 
 @user_blueprint.route('/cadastro', methods=['POST'])
-def cadastrar_atividade():
-    print("a")
-    
+def cadastrar_usuario():    
     try:
         nome = request.json.get('nome', None)
         sobrenome = request.json.get('sobrenome', None)
@@ -47,8 +45,44 @@ def pesquisar_usuario(matricula):
             "email": user.email,
             "telefone": user.telefone,
             "role": user.role,
-            "cpf": user.cpf
+            "cpf": user.cpf,
+            "matricula": user.matricula
 
         }), 200
+    else:
+        return jsonify({"error": "Usuário não encontrado"}), 404
+
+@user_blueprint.route('/editar/<matricula>', methods=['PUT'])
+def editar_usuario(matricula):
+    user = Users.query.filter_by(matricula=matricula).first()
+    if user:
+        try:
+            nome = request.json.get('nome', None)
+            sobrenome = request.json.get('sobrenome', None)
+            cpf = request.json.get('cpf', None)
+            email = request.json.get('email', None)
+            telefone = request.json.get('telefone', None)
+            role =  request.json.get('role', None)
+            matricula =  request.json.get('matricula', None)
+            
+            if(validar_email(email)==False):
+                return jsonify({"msg": "Email incorreto"}), 401
+            if(validar_cpf(cpf)==False):
+                return jsonify({"msg": "Cpf incorreto"}), 401
+            if(validar_numero_celular(telefone)==False):
+                return jsonify({"msg": "Número incorreto"}), 401
+            
+            user.nome = nome
+            user.sobrenome = sobrenome
+            user.cpf = cpf
+            user.email = email
+            user.telefone = telefone
+            user.role =  role
+            user.matricula = matricula 
+            db.session.commit()
+            return jsonify(msg="Usuário editado com sucesso!"), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 404
+
     else:
         return jsonify({"error": "Usuário não encontrado"}), 404
