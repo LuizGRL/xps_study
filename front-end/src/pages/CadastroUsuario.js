@@ -3,18 +3,15 @@ import axios from 'axios';
 
 function CadastroUsuario() {
   const [nome, setNome] = useState('');
-  const [sobrenome, setSobrenome] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [role, setRole] = useState(''); 
-  const [matricula, setMatricula] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [codigo, setCodigo] = useState('');
+
   
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/usuario/cadastro', {
-        nome,sobrenome,cpf,email,telefone,role,matricula
+        nome,descricao,codigo
       });
       console.log(response.data); 
       alert('Usuario inserido com sucesso');
@@ -43,84 +40,30 @@ function CadastroUsuario() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="number">
-            Sobrenome
+            codigo
           </label>
           <input
             type="text"
-            id="sobrenome"
-            value={sobrenome}
-            onChange={(e) => setSobrenome(e.target.value)}
+            id="codigo"
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
           />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-            Cpf
+            Descrição
           </label>
           <textarea
-            id="cpf"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
+            id="descricao"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="number">
-            email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="number">
-            Telefone
-          </label>
-          <input
-            type="text"
-            id="telefone"
-            value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
-            Tipo
-          </label>
-          <select
-            id="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required>
-            <option value="">Selecione a role</option>
-            <option value="admin">Admin</option>
-            <option value="aluno">Aluno</option>
-            <option value="professor">Professor</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="number">
-                Matrícula
-          </label>
-          <input
-            type="text"
-            id="matricula"
-            value={matricula}
-            onChange={(e) => setMatricula(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
+        
 
         <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Registrar Usuário

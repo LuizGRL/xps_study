@@ -16,6 +16,13 @@ class Turma(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.String(100), nullable=False)
     codigo = db.Column(db.String(100), unique=True)
+    
+class Alunoxturma(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_aluno = db.Column(db.Integer)
+    id_turma = db.Column(db.Integer)
+
+  
  
 
 

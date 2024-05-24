@@ -34,7 +34,6 @@ def cadastrar_usuario():
     except Exception as e:
         print(e)
     
-# No seu arquivo de rotas do Flask
 @user_blueprint.route('/pesquisar/<matricula>', methods=['GET'])
 def pesquisar_usuario(matricula):
     user = Users.query.filter_by(matricula=matricula).first()
