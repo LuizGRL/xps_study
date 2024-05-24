@@ -22,8 +22,17 @@ class Alunoxturma(db.Model):
     id_aluno = db.Column(db.Integer)
     id_turma = db.Column(db.Integer)
 
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    descricao = db.Column(db.String(100), nullable=False)
+    imagem = db.Column(db.LargeBinary)
+
   
- 
+class ItemAluno(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_aluno = db.Column(db.Integer)
+    id_item = db.Column(db.Integer)
 
 
    
