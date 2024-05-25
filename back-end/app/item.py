@@ -2,8 +2,6 @@ from flask import Blueprint, jsonify, request
 from . import db
 from app.model import Item, ItemAluno, Users
 import base64
-import tempfile
-import os
 
 
 item_blueprint = Blueprint('item', __name__)
@@ -94,4 +92,11 @@ def associar_usuario():
     except Exception as e:
         print(str(e))
         return jsonify({'error': f'{str(e)}'}), 400
+
+@item_blueprint.route('/itens', methods=['GET'])
+def get_itens():
+    itens = Item.query.all()
+    itens_list = [{'id': item.id, 'nome': item.nome} for item in itens]
+    return jsonify(itens_list)
+
 

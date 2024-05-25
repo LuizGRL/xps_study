@@ -22,10 +22,14 @@ def create_app():
     from .usuario import user_blueprint
     from .turma import turma_blueprint
     from .item import item_blueprint
+    from .atividade import atividade_blueprint
+
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     app.register_blueprint(user_blueprint, url_prefix='/usuario')
     app.register_blueprint(turma_blueprint, url_prefix='/turma')
     app.register_blueprint(item_blueprint, url_prefix='/item')
+    app.register_blueprint(atividade_blueprint, url_prefix='/atividade')
+
 
 
 

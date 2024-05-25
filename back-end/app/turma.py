@@ -72,3 +72,9 @@ def associar_usuario():
         print(str(e))
         return jsonify({'error': f'{str(e)}'}), 400
 
+@turma_blueprint.route('/turmas', methods=['GET'])
+def get_turmas():
+    turmas = Turma.query.all()
+    turmas_list = [{'id': turma.id, 'nome': turma.nome} for turma in turmas]
+    return jsonify(turmas_list)
+
