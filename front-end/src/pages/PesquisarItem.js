@@ -5,6 +5,7 @@ function PesquisarItem() {
     const [id, setId] = useState('');
     const [item, setItem] = useState(null);
     const [erro, setErro] = useState('');
+    const [imagem, setImagem] = useState('');
 
     const handleSearch = async () => {
         try {
@@ -26,12 +27,26 @@ function PesquisarItem() {
         }));
     };
 
+    const handleImagemChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setImagem(reader.result);
+        };
+
+        reader.readAsDataURL(file);
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (item && item.id) {
             try {
-                console.log(`Enviando dados para atualizar: ${JSON.stringify(item)}`);
-                const response = await axios.put(`http://localhost:5000/item/editar/${item.id}`, item);
+                // Adiciona a imagem convertida em base64 ao item
+                const updatedItem = { ...item, imagem: imagem.split(',')[1] };
+
+                console.log(`Enviando dados para atualizar: ${JSON.stringify(updatedItem)}`);
+                const response = await axios.put(`http://localhost:5000/item/editar/${item.id}`, updatedItem);
                 console.log('Resposta do servidor:', response.data);
                 alert('Item atualizado com sucesso');
             } catch (error) {
@@ -72,6 +87,9 @@ function PesquisarItem() {
                             onChange={handleInputChange}
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
+                    </label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Descrição
                         <input
                             type="text"
                             name="descricao"
@@ -79,22 +97,22 @@ function PesquisarItem() {
                             onChange={handleInputChange}
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
-                       
-                       <input
-                            type="text"
-                            name="imagem"
-                            value={item.imagem || ''}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                        {item.imagem && (
-                            <div>
-                            <img src={`data:image/jpeg;base64,${item.imagem}`} alt="Imagem do item" className="mt-2 max-w-xs" />
-                            </div>
-                        )}
-                       
-                    
                     </label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Imagem
+                        <input
+                            type="file"
+                            id="imagem"
+                            onChange={handleImagemChange}
+                            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                            required
+                        />
+                    </label>
+                    {item.imagem && (
+                        <div>
+                            <img src={`data:image/jpeg;base64,${item.imagem}`} alt="Imagem do item" className="mt-2 max-w-xs" />
+                        </div>
+                    )}
                     <button
                         type="submit"
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"

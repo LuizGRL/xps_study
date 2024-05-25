@@ -42,26 +42,33 @@ def pesquisar_turma(id):
           return jsonify({
             "nome": item.nome,
             "descricao": item.descricao,
-            "imagem": image_base64_encoded
+            "imagem": image_base64_encoded,
+            "id":item.id
         }), 200
     else:
         return jsonify({"error": "Item não encontrado"}), 404
 
-@item_blueprint.route('/editar/<codigo>', methods=['PUT'])
-def editar_turma(codigo):
-    turma = Turma.query.filter_by(codigo=codigo).first()
-    if turma:
+@item_blueprint.route('/editar/<id>', methods=['PUT'])
+def editar_item(id):
+    item = Item.query.filter_by(id=id).first()
+    if item:
         try:
             nome = request.json.get('nome', None)
             descricao = request.json.get('descricao', None)
-            codigo = request.json.get('codigo', None)
-     
-            turma.nome = nome
-            turma.descricao = descricao
-            turma.codigo = codigo
+            imagem = request.json.get('imagem')
+            if not nome or not descricao or not imagem:
+                return jsonify(msg="Nome, descrição e imagem são obrigatórios"), 400
+            if ',' in imagem:
+                header, encoded = imagem.split(',', 1)
+                dados_imagem = base64.b64decode(encoded)
+            else:
+                dados_imagem = base64.b64decode(imagem)
+            item.nome = nome
+            item.descricao = descricao
+            item.imagem = dados_imagem
 
             db.session.commit()
-            return jsonify(msg="Turma editada com sucesso!"), 200
+            return jsonify(msg="Item editado com sucesso!"), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 404
 
