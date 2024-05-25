@@ -30,7 +30,7 @@ def cadastrar_item():
         return jsonify(msg="Erro no cadastro do Item"), 400
 
 @item_blueprint.route('/pesquisar/<id>', methods=['GET'])
-def pesquisar_turma(id):
+def pesquisar_item(id):
     item = Item.query.filter_by(id=id).first()
     image_data = item.imagem
 

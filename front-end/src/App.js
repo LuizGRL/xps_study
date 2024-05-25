@@ -10,6 +10,7 @@ import AssociarAlunoTurma  from './pages/AssociarTurmaAAluno';
 import CadastroItem from './pages/CadastroItem';
 import PesquisarItem from './pages/PesquisarItem';
 import CadastroAtividade from './pages/CadastroAtividade';
+import PesquisarAtividade from './pages/PesquisarAtividade';
 
 function App() {
   return (
@@ -59,6 +60,9 @@ function MainContent() {
               <li className="my-2">
                 <Link to="/atividade/cadastro" className="text-white hover:text-blue-500">Cadastro Atividade</Link>
               </li>
+              <li className="my-2">
+                <Link to="/atividade/pesquisar" className="text-white hover:text-blue-500">Pesquisar Atividade</Link>
+              </li>
             </ul>
           )}
         </div>
@@ -106,6 +110,11 @@ function MainContent() {
                    <Route path="/atividade/cadastro" element={
                         <RoleBasedRoute requiredRoles={["admin"]}> 
                           <CadastroAtividade />
+                        </RoleBasedRoute>
+                } />  
+                <Route path="/atividade/pesquisar" element={
+                        <RoleBasedRoute requiredRoles={["admin"]}> 
+                          <PesquisarAtividade />
                         </RoleBasedRoute>
                 } />  
         </Routes>
