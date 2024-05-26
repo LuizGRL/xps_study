@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from . import db
-from app.model import Item, ItemAluno, Users
+from app.model import Item, Users, Itemaluno
 import base64
 
 
@@ -71,32 +71,29 @@ def editar_item(id):
             return jsonify({"error": str(e)}), 404
 
     else:
-        return jsonify({"error": "Turma não encontrada"}), 404
+        return jsonify({"error": "Item não encontrada"}), 404
     
-
-@item_blueprint.route('/associar', methods=['POST'])
-def associar_usuario():
-    data = request.get_json()
-    codigo = data.get('codigo')
-    matricula = data.get('matricula')
-    if not codigo or not matricula:
-        return jsonify({'error': 'Código da turma e matrícula do aluno são obrigatórios'}), 400
-    
+@item_blueprint.route('/ver/<matricula>', methods=['GET'])
+def ver_itens_usuario(matricula):
     try:
-        aluno = Users.query.filter_by(matricula=matricula).first()
-        turma = Turma.query.filter_by(codigo = codigo).first()
-        associacao = Alunoxturma(id_aluno = aluno.id, id_turma = turma.id)
-        db.session.add(associacao)
-        db.session.commit()
-        return jsonify({'message': 'Aluno associado à turma com sucesso'}), 200
+        user = Users.query.filter_by(matricula=matricula).first()
+        if not user:
+            return jsonify({"error": "Usuário não encontrado"}), 404
+
+        itens = Itemaluno.query.filter_by(id_aluno=user.id).all()
+        itens_list = []
+        for item_aluno in itens:
+            item = Item.query.filter_by(id=item_aluno.id_item).first()
+            if item:
+                itens_list.append({
+                    "id": item.id,
+                    "nome": item.nome,
+                    "descricao": item.descricao,
+                    "imagem": base64.b64encode(item.imagem).decode('utf-8')
+                })
+        
+        return jsonify(itens_list), 200
     except Exception as e:
-        print(str(e))
-        return jsonify({'error': f'{str(e)}'}), 400
-
-@item_blueprint.route('/itens', methods=['GET'])
-def get_itens():
-    itens = Item.query.all()
-    itens_list = [{'id': item.id, 'nome': item.nome} for item in itens]
-    return jsonify(itens_list)
-
+        print(f"Erro ao buscar itens do usuário: {e}")
+        return jsonify({"error": "Erro ao buscar itens do usuário"}), 500
 

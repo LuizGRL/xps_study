@@ -29,7 +29,7 @@ class Item(db.Model):
     imagem = db.Column(db.LargeBinary)
 
   
-class ItemAluno(db.Model):
+class Itemaluno(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_aluno = db.Column(db.Integer)
     id_item = db.Column(db.Integer)
@@ -62,6 +62,12 @@ class Resposta(db.Model):
     descricao = db.Column(db.String(400), nullable=False)
     anexo = db.Column(db.LargeBinary)
     aprovado = db.Column(db.String(1))
+
+class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_resposta = db.Column(db.Integer)
+    id_atividade = db.Column(db.Integer)
+    descricao = db.Column(db.String(400), nullable=False)
 
 
 

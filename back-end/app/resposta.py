@@ -37,7 +37,7 @@ def cadastrar_resposta():
     
     
 @resposta_blueprint.route('/pesquisar/<codigo>', methods=['GET'])
-def pesquisar_atividade(codigo):
+def pesquisar_resposta(codigo):
     resposta = Resposta.query.filter_by(id_atividade=codigo).first()
     if resposta:
           return jsonify({
@@ -50,37 +50,24 @@ def pesquisar_atividade(codigo):
     else:
         return jsonify({"error": "resposta não encontrado"}), 404
     
-@resposta_blueprint.route('/editar/<codigo>', methods=['PUT'])
-def editar_atividade(codigo):
-    atividade = Atividade.query.filter_by(codigo=codigo).first()
-    if atividade:
-        try:
-            nome = request.form.get('nome', None)
-            descricao = request.form.get('descricao', None)
-            codigo = request.form.get('codigo', None)
-            pontos = request.form.get('pontos', None)
-            item = request.form.get('item', None)
-            turma = request.form.get('turma', None)
-            anexo = request.files.get('anexo', None)
-            atividade.nome = nome
-            atividade.descricao = descricao
-            atividade.codigo = codigo
-            atividade.pontos = pontos
-            atividade.item = item
-            atividade.turma = turma
-            if not nome or not descricao or not item or not codigo or not pontos or not turma:
-                return jsonify(msg="Todos os dados são obrigatorios"), 400
-        
-            if not anexo or not anexo.filename.endswith('.pdf'):
-                return jsonify({"error": "Formato de pdf invalido"}), 400
-            pdf_data = anexo.read()
-            atividade.anexo = pdf_data
+    
+@resposta_blueprint.route('/ver/<codigo>', methods=['GET'])
+def ver_respota(codigo):
+    respostas = Resposta.query.filter_by(id_atividade=codigo).all()
 
+    atividades_list = []
+    
+    for resposta in respostas:
+        if(resposta.aprovado != 'S'):        
+            atividades_list.append({
+                    "nome": resposta.nome,
+                    "descricao": resposta.descricao,
+                    "aprovado": resposta.aprovado,
+                    "anexo" : resposta.anexo.decode('latin1')
+            })
 
-            db.session.commit()
-            return jsonify(msg="Atividade editada com sucesso!"), 200
-        except Exception as e:
-            return jsonify({"error": str(e)}), 404
-
+    if atividades_list:
+        return jsonify(atividades_list), 200
     else:
-        return jsonify({"error": "Turma não encontrada"}), 404
+        return jsonify({"error": "Nenhuma atividade encontrada"}), 404
+    

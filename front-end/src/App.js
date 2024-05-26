@@ -14,6 +14,9 @@ import PesquisarAtividade from './pages/PesquisarAtividade';
 import VerAtividades from './pages/VerAtividades';
 import ResponderAtividade from './pages/ResponderAtividade';
 import VerRespostas from './pages/VerReposta';
+import DarFeedback from './pages/DarFeedback';
+import AvaliarAtividade from './pages/Avaliar';
+import VerItensUsuario from './pages/VerItensUsuario';
 
 function App() {
   return (
@@ -67,6 +70,12 @@ function MainContent() {
               </li>
               <li className="my-2">
                 <Link to="/atividade/ver" className="text-white hover:text-blue-500">Ver Atividades</Link>
+              </li>
+              <li className="my-2">
+                <Link to="/feedback/ver" className="text-white hover:text-blue-500">Feedback</Link>
+              </li>
+              <li className="my-2">
+                <Link to="/itens/usuario/:matricula" className="text-white hover:text-blue-500">Ver itens</Link>
               </li>
             </ul>
           )}
@@ -137,6 +146,21 @@ function MainContent() {
                           <VerRespostas />
                         </RoleBasedRoute>
                 } />  
+                  <Route path="/feedback/ver" element={
+                        <RoleBasedRoute requiredRoles={["admin"]}> 
+                          <DarFeedback />
+                        </RoleBasedRoute>
+                } />
+                <Route path="/feedback/avaliar/:id" element={
+                        <RoleBasedRoute requiredRoles={["admin"]}> 
+                          <AvaliarAtividade />
+                        </RoleBasedRoute>
+                } />    
+                 <Route path="/itens/usuario/:matricula" element={
+                        <RoleBasedRoute requiredRoles={["admin"]}> 
+                          <VerItensUsuario />
+                        </RoleBasedRoute>
+                } />
         </Routes>
       </div>
     </div>
