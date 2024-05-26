@@ -3,18 +3,27 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 function ResponderAtividade() {
-    const { codigo } = useParams();
-    const [resposta, setResposta] = useState('');
+    const { codigo, matricula } = useParams();
+    const [nome, setNome] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [anexo, setAnexo] = useState(null);
     const [erro, setErro] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const matricula = localStorage.getItem('matricula');
+            const formData = new FormData();
+            formData.append('nome', nome);
+            formData.append('descricao', descricao);
+            formData.append('anexo', anexo);
+            formData.append('codigo', codigo);
+            formData.append('matricula', matricula);
+
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/atividade/responder/${codigo}`, { resposta, matricula }, {
+            await axios.post(`http://localhost:5000/resposta/cadastro`, formData, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
                 }
             });
             alert('Resposta enviada com sucesso!');
@@ -24,16 +33,38 @@ function ResponderAtividade() {
         }
     };
 
+    const handleFileChange = (e) => {
+        setAnexo(e.target.files[0]);
+    };
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-lg font-semibold text-gray-700 mb-4">Responder Atividade</h1>
             {erro && <p className="text-red-500">{erro}</p>}
             <form onSubmit={handleSubmit}>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Resposta
+                    Nome
+                    <input
+                        type="text"
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                </label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Descrição
                     <textarea
-                        value={resposta}
-                        onChange={(e) => setResposta(e.target.value)}
+                        value={descricao}
+                        onChange={(e) => setDescricao(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                </label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Anexo
+                    <input
+                        type="file"
+                        onChange={handleFileChange}
+                        accept=".pdf"
                         className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     />
                 </label>

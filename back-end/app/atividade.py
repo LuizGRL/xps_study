@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from . import db
-from app.model import Atividade, Users,Alunoxturma
+from app.model import Atividade, Users,Alunoxturma,Resposta
 
 atividade_blueprint = Blueprint('atividade', __name__)
 
@@ -42,25 +42,37 @@ def cadastrar_atividade():
 @atividade_blueprint.route('/ver/<matricula>', methods=['GET'])
 def ver_atividades(matricula):
     user = Users.query.filter_by(matricula=matricula).first()
-    turma = Alunoxturma.query.filter_by(id_aluno = user.id).first()
+    turma = Alunoxturma.query.filter_by(id_aluno=user.id).first()
     atividades = Atividade.query.filter_by(turma=turma.id_turma).all()
 
-
-    if atividades:
-        atividades_list = [
+    atividades_list = []
+    for atividade in atividades:
+        respostas = Resposta.query.filter_by(id_atividade=atividade.codigo).all()
+        respostas_list = [
             {
-                "nome": atividade.nome,
-                "descricao": atividade.descricao,
-                "codigo": atividade.codigo,
-                "pontos": atividade.pontos,
-                "item": atividade.item,
-                "turma": atividade.turma,
-                "anexo": atividade.anexo.decode('latin1')
-            } for atividade in atividades
+                "id": resposta.id,
+                "nome": resposta.nome,
+                "descricao": resposta.descricao,
+                "anexo": resposta.anexo.decode('latin1'),
+                "aprovado": resposta.aprovado
+            } for resposta in respostas
         ]
+        atividades_list.append({
+            "nome": atividade.nome,
+            "descricao": atividade.descricao,
+            "codigo": atividade.codigo,
+            "pontos": atividade.pontos,
+            "item": atividade.item,
+            "turma": atividade.turma,
+            "anexo": atividade.anexo.decode('latin1') if atividade.anexo else None,
+            "respostas": respostas_list
+        })
+
+    if atividades_list:
         return jsonify(atividades_list), 200
     else:
         return jsonify({"error": "Nenhuma atividade encontrada"}), 404
+
 
 
 

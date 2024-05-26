@@ -13,6 +13,7 @@ import CadastroAtividade from './pages/CadastroAtividade';
 import PesquisarAtividade from './pages/PesquisarAtividade';
 import VerAtividades from './pages/VerAtividades';
 import ResponderAtividade from './pages/ResponderAtividade';
+import VerRespostas from './pages/VerReposta';
 
 function App() {
   return (
@@ -126,9 +127,14 @@ function MainContent() {
                           <VerAtividades />
                         </RoleBasedRoute>
                 } />  
-                  <Route path="/resposta/:cadastro" element={
+                  <Route path="/resposta/:codigo/:matricula" element={
                         <RoleBasedRoute requiredRoles={["admin"]}> 
                           <ResponderAtividade />
+                        </RoleBasedRoute>
+                } />  
+                 <Route path="/resposta/:codigo" element={
+                        <RoleBasedRoute requiredRoles={["admin"]}> 
+                          <VerRespostas />
                         </RoleBasedRoute>
                 } />  
         </Routes>

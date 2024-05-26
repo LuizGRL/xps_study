@@ -11,7 +11,6 @@ function VerAtividades() {
         const fetchAtividades = async () => {
             try {
                 const matricula = localStorage.getItem('matricula');
-                console.log('Matrícula:', matricula);
                 const response = await axios.get(`http://localhost:5000/atividade/ver/${matricula}`);
                 setAtividades(response.data);
                 setErro('');
@@ -26,7 +25,11 @@ function VerAtividades() {
     }, []);
 
     const handleResponder = (codigo) => {
-        // Redireciona para a página de resposta da atividade
+        const matricula = localStorage.getItem('matricula');
+        navigate(`/resposta/${codigo}/${matricula}`);
+    };
+
+    const handleVerRespostas = (codigo) => {
         navigate(`/resposta/${codigo}`);
     };
 
@@ -45,9 +48,9 @@ function VerAtividades() {
                             <p><strong>Item:</strong> {atividade.item}</p>
                             {atividade.anexo && (
                                 <a
-                                    // href={`data:application/pdf;base64,${atividade.anexo}`}
-                                    // download="anexo.pdf"
-                                    // className="text-blue-500"
+                                    href={`data:application/pdf;base64,${atividade.anexo}`}
+                                    download="anexo.pdf"
+                                    className="text-blue-500"
                                 >
                                     Baixar Anexo
                                 </a>
@@ -58,6 +61,14 @@ function VerAtividades() {
                             >
                                 Responder
                             </button>
+                            {atividade.respostas.length > 0 && (
+                                <button
+                                    onClick={() => handleVerRespostas(atividade.codigo)}
+                                    className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                    Ver Respostas
+                                </button>
+                            )}
                         </li>
                     ))}
                 </ul>

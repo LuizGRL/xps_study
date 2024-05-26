@@ -9,81 +9,48 @@ def cadastrar_resposta():
     try:
         nome = request.form.get('nome')
         descricao = request.form.get('descricao')
-        codigo = request.form.get('codigo')
-        pontos = request.form.get('pontos')
-        item = request.form.get('item')
-        turma = request.form.get('turma')
         anexo = request.files.get('anexo')
-
-        if not nome or not descricao or not item or not codigo or not pontos or not turma:
+        aprovado = 'N'
+        id_atividade = request.form.get('codigo')
+        matricula = request.form.get('matricula')
+        if not nome or not descricao or not id_atividade or not matricula or not aprovado:
             return jsonify(msg="Todos os dados são obrigatorios"), 400
         
         if not anexo or not anexo.filename.endswith('.pdf'):
             return jsonify({"error": "Formato de pdf invalido"}), 400
         pdf_data = anexo.read()
 
-        atividade = Atividade(
+        resposta = Resposta(
             nome=nome,
             descricao=descricao,
-            codigo=codigo,
-            pontos=pontos,
-            item=item,
-            turma=turma,
+            aprovado=aprovado,
+            id_atividade=id_atividade,
+            matricula=matricula,
             anexo=pdf_data
         )
-        db.session.add(atividade)
+        db.session.add(resposta)
         db.session.commit()
-        return jsonify(msg="Atividade cadastrada com sucesso!"), 200
+        return jsonify(msg="Reposta cadastrada com sucesso!"), 200
     except Exception as e:
-        print(f"Erro no cadastro da Atividade: {e}")
-        return jsonify(msg="Erro no cadastro da Atividade"), 400
+        print(f"Erro no cadastro da Resposta: {e}")
+        return jsonify(msg="Erro no cadastro da Resposta"), 400
     
     
-@atividade_blueprint.route('/ver/<matricula>', methods=['GET'])
-def ver_atividades(matricula):
-    user = Users.query.filter_by(matricula=matricula).first()
-    turma = Alunoxturma.query.filter_by(id_aluno = user.id).first()
-    atividades = Atividade.query.filter_by(turma=turma.id_turma).all()
-
-
-    if atividades:
-        atividades_list = [
-            {
-                "nome": atividade.nome,
-                "descricao": atividade.descricao,
-                "codigo": atividade.codigo,
-                "pontos": atividade.pontos,
-                "item": atividade.item,
-                "turma": atividade.turma,
-                "anexo": atividade.anexo.decode('latin1')
-            } for atividade in atividades
-        ]
-        return jsonify(atividades_list), 200
-    else:
-        return jsonify({"error": "Nenhuma atividade encontrada"}), 404
-
-
-
-@atividade_blueprint.route('/pesquisar/<codigo>', methods=['GET'])
+@resposta_blueprint.route('/pesquisar/<codigo>', methods=['GET'])
 def pesquisar_atividade(codigo):
-    atividade = Atividade.query.filter_by(codigo=codigo).first()
-
-
-    if atividade:
+    resposta = Resposta.query.filter_by(id_atividade=codigo).first()
+    if resposta:
           return jsonify({
-            "nome": atividade.nome,
-            "descricao": atividade.descricao,
-            "codigo": atividade.codigo,
-            "pontos": atividade.pontos,
-            "item": atividade.item,
-            "turma": atividade.turma,
-            "anexo" : atividade.anexo.decode('latin1')
+            "nome": resposta.nome,
+            "descricao": resposta.descricao,
+            "aprovado": resposta.aprovado,
+            "anexo" : resposta.anexo.decode('latin1')
 
         }), 200
     else:
-        return jsonify({"error": "Atividade não encontrado"}), 404
+        return jsonify({"error": "resposta não encontrado"}), 404
     
-@atividade_blueprint.route('/editar/<codigo>', methods=['PUT'])
+@resposta_blueprint.route('/editar/<codigo>', methods=['PUT'])
 def editar_atividade(codigo):
     atividade = Atividade.query.filter_by(codigo=codigo).first()
     if atividade:
