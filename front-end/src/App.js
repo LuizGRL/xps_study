@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import Login from './pages/Login';  // Certifique-se de que o caminho para o componente está correto
+import Login from './pages/Login';  
 import ClassRegistration from './pages/CadastroTurma';
 import RoleBasedRoute from './RoleValidator';
 import CadastroUsuario from './pages/CadastroUsuario';
@@ -11,6 +11,8 @@ import CadastroItem from './pages/CadastroItem';
 import PesquisarItem from './pages/PesquisarItem';
 import CadastroAtividade from './pages/CadastroAtividade';
 import PesquisarAtividade from './pages/PesquisarAtividade';
+import VerAtividades from './pages/VerAtividades';
+import ResponderAtividade from './pages/ResponderAtividade';
 
 function App() {
   return (
@@ -22,12 +24,11 @@ function App() {
 
 function MainContent() {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();  // Agora dentro do contexto do Router
+  const location = useLocation();  
   const isLoginRoute = location.pathname === '/login';
 
   return (
     <div className="flex">
-      {/* Renderiza a Nav Bar somente se não estiver na tela de login */}
       {!isLoginRoute && (
         <div className="min-h-screen bg-gray-800 p-5 text-white">
           <button onClick={() => setIsOpen(!isOpen)} className="mb-2">
@@ -62,6 +63,9 @@ function MainContent() {
               </li>
               <li className="my-2">
                 <Link to="/atividade/pesquisar" className="text-white hover:text-blue-500">Pesquisar Atividade</Link>
+              </li>
+              <li className="my-2">
+                <Link to="/atividade/ver" className="text-white hover:text-blue-500">Ver Atividades</Link>
               </li>
             </ul>
           )}
@@ -115,6 +119,16 @@ function MainContent() {
                 <Route path="/atividade/pesquisar" element={
                         <RoleBasedRoute requiredRoles={["admin"]}> 
                           <PesquisarAtividade />
+                        </RoleBasedRoute>
+                } />  
+                <Route path="/atividade/ver" element={
+                        <RoleBasedRoute requiredRoles={["admin"]}> 
+                          <VerAtividades />
+                        </RoleBasedRoute>
+                } />  
+                  <Route path="/resposta/:cadastro" element={
+                        <RoleBasedRoute requiredRoles={["admin"]}> 
+                          <ResponderAtividade />
                         </RoleBasedRoute>
                 } />  
         </Routes>

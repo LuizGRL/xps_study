@@ -41,7 +41,6 @@ function PesquisarAtividade() {
                 formData.append('pontos', atividade.pontos);
                 formData.append('item', atividade.item);
                 formData.append('codigo', atividade.item);
-
                 formData.append('turma', atividade.turma);
                 if (novoAnexo) {
                     formData.append('anexo', novoAnexo);

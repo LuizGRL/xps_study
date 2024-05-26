@@ -18,7 +18,7 @@ def login():
         return jsonify({"msg": "Bad username or password"}), 401
 
     access_token = create_access_token(identity=username, additional_claims={"role": user.role})
-    return jsonify(access_token=access_token, role=user.role), 200
+    return jsonify(access_token=access_token, role=user.role,username=user.matricula), 200
 
 def role_required(required_role):
     def wrapper(fn):

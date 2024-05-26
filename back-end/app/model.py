@@ -43,8 +43,8 @@ class Atividade(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.String(400), nullable=False)
-    pontos = db.Column(db.Integer,unique=True)
-    codigo = db.Column(db.Integer)
+    pontos = db.Column(db.Integer)
+    codigo = db.Column(db.Integer,unique=True)
     anexo =db.Column(db.LargeBinary)
     item = db.Column(db.Integer)
     turma = db.Column(db.Integer)
@@ -53,6 +53,17 @@ class AtividadeTurma(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_atividade = db.Column(db.Integer)
     id_turma = db.Column(db.Integer)
+
+class Resposta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_atividade = db.Column(db.Integer)
+    matricula = db.Column(db.Integer)
+    nome = db.Column(db.String(100), nullable=False)
+    descricao = db.Column(db.String(400), nullable=False)
+    anexo = db.Column(db.LargeBinary)
+    aprovado = db.Column(db.String(1))
+
+
 
 
    

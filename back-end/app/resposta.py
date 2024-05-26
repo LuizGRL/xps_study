@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, request
 from . import db
-from app.model import Atividade, Users,Alunoxturma
+from app.model import Resposta
 
-atividade_blueprint = Blueprint('atividade', __name__)
+resposta_blueprint = Blueprint('resposta', __name__)
 
-@atividade_blueprint.route('/cadastro', methods=['POST'])
-def cadastrar_atividade():    
+@resposta_blueprint.route('/cadastro', methods=['POST'])
+def cadastrar_resposta():    
     try:
         nome = request.form.get('nome')
         descricao = request.form.get('descricao')

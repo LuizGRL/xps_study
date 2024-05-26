@@ -17,6 +17,8 @@ function Login() {
 
             localStorage.setItem('token', response.data.access_token);
             localStorage.setItem('role', response.data.role);
+            localStorage.setItem('matricula', response.data.username);
+
         } catch (error) {
             console.error('Login failed:', error);
             setError('Login failed. Please check your credentials.');
